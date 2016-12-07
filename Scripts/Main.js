@@ -16,23 +16,23 @@ function Main()
     var values = json.values;
     for(var index in values){
       var value = values[index];
-      html = "<div>"+value[3]+"</div>" + html;
+      html = "<div>"+value[2]+":"+value[3]+"</div>" + html;
     }
     output.innerHTML =  html;
   }
   //書き込み命令
-  function write(msg){
-    var params = {"cmd":"WRITE","name":"","msg":msg};
+  function write(name,msg){
+    var params = {"cmd":"WRITE","name":name,"msg":msg};
     sendJson(BBS_URL,params,onWrite);
   }
   //書き込みが完了したときに処理する内容
   function onWrite(json){
     if(json && json.result){
-      inputs[1].value = "送信完了";
+      inputs[2].value = "送信完了";
       load(); //書き込みが完了したあとに読み直す
     }
     else
-      inputs[1].value = "送信エラー";
+      inputs[2].value = "送信エラー";
   }
 
   //各インスタンスの取得
@@ -40,13 +40,14 @@ function Main()
   var output = document.querySelector("div");
 
   //送信ボタンを押した場合の処理
-  inputs[1].onclick = function(){
-    var msg = inputs[0].value;  //メッセージの取得
-    inputs[1].value = "送信中";  //ボタン表示の変更
-    write(msg);                 //書き込み
+  inputs[2].onclick = function(){
+    var name = inputs[0].value;
+    var msg = inputs[1].value;  //メッセージの取得
+    inputs[2].value = "送信中";  //ボタン表示の変更
+    write(name,msg);                 //書き込み
   }
 
   load(); //ページを開いた直後に読み込みを行う
 
-
+  //write("FD","仕事ってのは辛いね")
 }
